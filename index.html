@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>O Papa Taças</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.23.0/dist/phaser.js"></script>
+    <script src="scenes/welcome.js"></script>
+    <script src="scenes/papaTitulos.js"></script>
+
+    <style>
+      body {
+        margin-top: 10px;
+        padding: 0;
+      }
+
+      canvas {
+        border: 1px solid #000000;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="game"></div>
+
+    <script type="text/javascript">
+      const config = {
+        type: Phaser.AUTO,
+        autoCenter: Phaser.Scale.CENTER,
+        width: 800, //largura da tela do jogo
+        height: 550, //altura da tela do jogo
+        backgroundColor: "#000",
+        physics: {
+          default: "arcade",
+          arcade: {
+            gravity: { y: 0 },
+            debug: true,
+          },
+        },
+        parent: "game",
+        dom: {
+          createContainer: true,
+        },
+        scene: [Welcome, PapaTitulos],
+      };
+
+      var game = new Phaser.Game(config);
+      game.scene.start("Welcome");
+    </script>
+  </body>
+</html>
