@@ -1,27 +1,11 @@
 // Definindo a cena de boas-vindas usando a biblioteca Phaser
-var keyboard;
-var player;
-var scoreValue = 0;
-var score;
-var bench1;
-var bench2;
-var bench3;
-var bench4;
-var bench5;
-var bench6;
-var bench7;
-var bench8;
-var bench9;
-var trophy1;
-var trophy2;
-var trophy3;
-var trophy4;
-var enemy1;
-var enemy2;
-var enemy3;
-var caminhoEnemy1;
-var caminhoEnemy2;
-var caminhoEnemy3;
+let keyboard;
+let player;
+let score;
+let enemy1;
+let enemy2;
+let enemy3;
+let path = {};
 
 class PapaTitulos extends Phaser.Scene {
   // Construtor da cena
@@ -48,28 +32,44 @@ class PapaTitulos extends Phaser.Scene {
 
   // Função chamada quando a cena é criada
   create() {
+    let scoreValue = 0;
+    let enemies = [];
     score = this.add.text(50, 50, "Títulos:" + scoreValue, {
       fontSize: "30x",
       fill: "#fff",
     });
     // Configuração da imagem de fundo
-    this.add.image(250, 50, "background").setScale(0.8).setOrigin(0, 0);
-    bench1 = this.physics.add.staticImage(575, 170, "bench");
-    bench2 = this.physics.add.staticImage(575, 300, "bench");
-    bench3 = this.physics.add.staticImage(575, 430, "bench");
-    bench4 = this.physics.add.staticImage(575, 70, "bench");
-    bench5 = this.physics.add
+    const bg = this.add
+      .image(250, 50, "background")
+      .setScale(0.8)
+      .setOrigin(0, 0);
+    const bench1 = this.physics.add.staticImage(575, 170, "bench");
+    const bench2 = this.physics.add.staticImage(575, 300, "bench");
+    const bench3 = this.physics.add.staticImage(575, 430, "bench");
+    const bench4 = this.physics.add.staticImage(575, 70, "bench");
+    const bench5 = this.physics.add
       .staticImage(235, 170, "bench")
       .setFlip(true, false);
-    bench6 = this.physics.add
+    const bench6 = this.physics.add
       .staticImage(235, 300, "bench")
       .setFlip(true, false);
-    bench7 = this.physics.add
+    const bench7 = this.physics.add
       .staticImage(235, 70, "bench")
       .setFlip(true, false);
-    bench8 = this.physics.add
+    const bench8 = this.physics.add
       .staticImage(235, 430, "bench")
       .setFlip(true, false);
+    let benches = [];
+    benches.push(
+      bench1,
+      bench2,
+      bench3,
+      bench4,
+      bench5,
+      bench6,
+      bench7,
+      bench8
+    );
 
     player = this.physics.add
       .sprite(250, 600, "spfc")
@@ -79,10 +79,28 @@ class PapaTitulos extends Phaser.Scene {
       .setGravity(0, 0);
     player.setCollideWorldBounds(true);
 
-    trophy1 = this.physics.add.sprite(300, 100, "trophy1").setScale(0.15);
-    trophy2 = this.physics.add.sprite(375, 100, "trophy2").setScale(0.15);
-    trophy3 = this.physics.add.sprite(450, 96, "trophy3").setScale(0.08);
-    trophy4 = this.physics.add.sprite(525, 96, "trophy4").setScale(0.08);
+    const trophy1 = this.physics.add
+      .sprite(300, 100, "trophy1")
+      .setScale(0.15)
+      .setInteractive()
+      .setVisible(true);
+    const trophy2 = this.physics.add
+      .sprite(375, 100, "trophy2")
+      .setScale(0.15)
+      .setInteractive()
+      .setVisible(true);
+    const trophy3 = this.physics.add
+      .sprite(450, 96, "trophy3")
+      .setScale(0.08)
+      .setInteractive()
+      .setVisible(true);
+    const trophy4 = this.physics.add
+      .sprite(525, 96, "trophy4")
+      .setScale(0.08)
+      .setInteractive()
+      .setVisible(true);
+    let trophies = [];
+    trophies.push(trophy1, trophy2, trophy3, trophy4);
 
     enemy1 = this.physics.add
       .sprite(290, 180, "enemy1")
@@ -101,113 +119,89 @@ class PapaTitulos extends Phaser.Scene {
       .setScale(0.2)
       .setOrigin(0, 0);
     enemy3.setCollideWorldBounds(true);
+    enemies.push(enemy1, enemy2, enemy3);
+    path = { enemy1: 1, enemy2: 1, enemy3: 1 };
 
-    this.physics.add.collider(player, bench1);
-    this.physics.add.collider(player, bench2);
-    this.physics.add.collider(player, bench3);
-    this.physics.add.collider(player, bench4);
-    this.physics.add.collider(player, bench5);
-    this.physics.add.collider(player, bench6);
-    this.physics.add.collider(player, bench7);
-    this.physics.add.collider(player, bench8);
-    this.physics.add.collider(enemy1, bench1);
-    this.physics.add.collider(enemy1, bench2);
-    this.physics.add.collider(enemy1, bench3);
-    this.physics.add.collider(enemy1, bench4);
-    this.physics.add.collider(enemy1, bench5);
-    this.physics.add.collider(enemy1, bench6);
-    this.physics.add.collider(enemy1, bench7);
-    this.physics.add.collider(enemy1, bench8);
-    this.physics.add.collider(enemy2, bench1);
-    this.physics.add.collider(enemy2, bench2);
-    this.physics.add.collider(enemy2, bench3);
-    this.physics.add.collider(enemy2, bench4);
-    this.physics.add.collider(enemy2, bench5);
-    this.physics.add.collider(enemy2, bench6);
-    this.physics.add.collider(enemy2, bench7);
-    this.physics.add.collider(enemy2, bench8);
-    this.physics.add.collider(enemy3, bench1);
-    this.physics.add.collider(enemy3, bench2);
-    this.physics.add.collider(enemy3, bench3);
-    this.physics.add.collider(enemy3, bench4);
-    this.physics.add.collider(enemy3, bench5);
-    this.physics.add.collider(enemy3, bench6);
-    this.physics.add.collider(enemy3, bench7);
-    this.physics.add.collider(enemy3, bench8);
-    this.physics.add.collider(player, enemy1, () => {
-      console.log('gameOver');
-    });
-    this.physics.add.collider(player, enemy2, () => {
-      console.log('gameOver');
-    });
-    this.physics.add.collider(player, enemy3, () => {
-      console.log('gameOver');
-    });
-    keyboard = this.input.keyboard.createCursorKeys();
-    caminhoEnemy1 = "ida";
-    caminhoEnemy2 = "ida";
-    caminhoEnemy3 = "ida";
-    console.log(enemy1);
-    console.log(this.physics.add.overlap);
+    createCollisions(this, player, benches);
+    for (const enemy of enemies) {
+      createCollisions(this, enemy, benches);
+    }
+
+    createEndGameCollisions(this, player, enemies);
+    createTrophyCollisions(this, player, trophies);
+
+    keyboard = createKeyboard(this);
   }
   update() {
-    if (caminhoEnemy1 === "ida") {
-      enemy1.setVelocityX(-600);
-      if (enemy1.body.blocked.left) {
-        caminhoEnemy1 = "volta";
-      }
+    moveEnemy(enemy1, path, 3);
+    moveEnemy(enemy2, path, 2);
+    moveEnemy(enemy3, path, 1);
+    movePlayer(player, 3);
+  }
+}
+function addCollider(scene, element1, element2) {
+  scene.physics.add.collider(element1, element2);
+}
+function addEndGameCollider(scene, element1, element2) {
+  scene.physics.add.collider(element1, element2, () => {});
+}
+function createCollisions(scene, element, list) {
+  for (const listItem of list) {
+    addCollider(scene, element, listItem);
+  }
+}
+function createEndGameCollisions(scene, player, enemyList) {
+  for (const enemy of enemyList) {
+    addEndGameCollider(scene, player, enemy);
+  }
+  console.log("gameOver");
+  // scene.physics.pause();
+}
+function createKeyboard(scene) {
+  return scene.input.keyboard.createCursorKeys();
+}
+function moveEnemy(enemy, path, multiplier) {
+  const key = enemy.body.gameObject.texture.key;
+  if (path[`${key}`] === 1) {
+    enemy.setVelocityX(-(multiplier * 100));
+    if (enemy.body.blocked.left) {
+      path[`${key}`] = 2;
     }
-    if (caminhoEnemy1 === "volta") {
-      enemy1.setVelocityX(600);
-      if (enemy1.body.blocked.right) {
-        caminhoEnemy1 = "ida";
-      }
-    }
-    if (caminhoEnemy2 === "ida") {
-      enemy2.setVelocityX(-200);
-      if (enemy2.body.blocked.left) {
-        caminhoEnemy2 = "volta";
-      }
-    }
-    if (caminhoEnemy2 === "volta") {
-      enemy2.setVelocityX(200);
-      if (enemy2.body.blocked.right) {
-        caminhoEnemy2 = "ida";
-      }
-    }
-    if (caminhoEnemy3 === "ida") {
-      enemy3.setVelocityX(-60);
-      if (enemy3.body.blocked.left) {
-        caminhoEnemy3 = "volta";
-      }
-    }
-    if (caminhoEnemy3 === "volta") {
-      enemy3.setVelocityX(60);
-      if (enemy3.body.blocked.right) {
-        caminhoEnemy3 = "ida";
-      }
-    }
-
-    player.setAcceleration(0, 0);
-    switch (keyboard.left.isDown) {
-      case true:
-        player.setAccelerationX(-300);
-    }
-    switch (keyboard.right.isDown) {
-      case true:
-        player.setAccelerationX(300);
-    }
-    switch (keyboard.up.isDown) {
-      case true:
-        player.setAccelerationY(-300);
-    }
-    switch (keyboard.down.isDown) {
-      case true:
-        player.setAccelerationY(300);
+  }
+  if (path[`${key}`] === 2) {
+    enemy.setVelocityX(multiplier * 100);
+    if (enemy.body.blocked.right) {
+      path[`${key}`] = 1;
     }
   }
 }
-
-function ok() {
-  console.log("gameover");
+function movePlayer(player, multiplier) {
+  player.setAcceleration(0, 0);
+  switch (keyboard.left.isDown) {
+    case true:
+      player.setAccelerationX(-100 * multiplier);
+  }
+  switch (keyboard.right.isDown) {
+    case true:
+      player.setAccelerationX(100 * multiplier);
+  }
+  switch (keyboard.up.isDown) {
+    case true:
+      player.setAccelerationY(-100 * multiplier);
+  }
+  switch (keyboard.down.isDown) {
+    case true:
+      player.setAccelerationY(100 * multiplier);
+  }
+}
+function addTrophyCollider(scene, element1, element2) {
+  scene.physics.add.collider(element1, element2, () => {
+    console.log("ganhou");
+  });
+}
+function createTrophyCollisions(scene, player, trophyList) {
+  for (const trophy of trophyList) {
+    addTrophyCollider(scene, player, trophy);
+  }
+  // scene.physics.pause();
 }
