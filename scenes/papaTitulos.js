@@ -10,7 +10,7 @@ let path = {};
 let enemy1x = 300;
 let enemy2x = 375;
 let enemy3x = 500;
-let playerx = 250;
+let playerx = 300;
 let playery = 600;
 let trophies = [];
 let trophiesX = {
@@ -101,7 +101,7 @@ class PapaTitulos extends Phaser.Scene {
       bench8
     );
     player = this.physics.add
-      .sprite(250, 600, "spfc")
+      .sprite(300, 600, "spfc")
       .setScale(0.1)
       .setBounce(0.2, 0.2)
       .setDrag(300, 300)
