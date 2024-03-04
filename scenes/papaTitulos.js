@@ -1,4 +1,4 @@
-// Definindo a cena de boas-vindas usando a biblioteca Phaser
+// Definindo a cena do jogo usando a biblioteca Phaser
 let keyboard;
 let player;
 let score;
@@ -37,160 +37,149 @@ class PapaTitulos extends Phaser.Scene {
 
   // Pré-carregamento de recursos
   preload() {
-    this.load.image("okBtn", "assets/okBtn.png"); // Carregando a imagem do botão
-    this.load.image("background", "assets/background.jpg");
-    this.load.image("bench", "assets/bench.png"); // Carregando a imagem de fundo
-    this.load.image("trophy1", "assets/trophy1.png");
-    this.load.image("trophy2", "assets/trophy2.png");
-    this.load.image("trophy3", "assets/trophy3.png");
-    this.load.image("trophy4", "assets/trophy4.png");
-    this.load.image("spfc", "assets/spfc.png");
-    this.load.image("enemy1", "assets/santos.png");
-    this.load.image("enemy2", "assets/palmeiras.png");
-    this.load.image("enemy3", "assets/corinthians.png");
-    this.load.image("okBtn", "assets/okBtn.png"); // Carregando a imagem do botão
-    this.load.image("blackBg", "assets/blackBackground.jpg"); // Carregando a imagem do botão
+    // Carregando imagens e sprites
+    this.load.image("okBtn", "assets/okBtn.png"); // Botão "OK"
+    this.load.image("background", "assets/background.jpg"); // Fundo do jogo
+    this.load.image("bench", "assets/bench.png"); // Banco
+    this.load.image("trophy1", "assets/trophy1.png"); // Troféu 1
+    this.load.image("trophy2", "assets/trophy2.png"); // Troféu 2
+    this.load.image("trophy3", "assets/trophy3.png"); // Troféu 3
+    this.load.image("trophy4", "assets/trophy4.png"); // Troféu 4
+    this.load.image("spfc", "assets/spfc.png"); // Time do jogador (São Paulo FC)
+    this.load.image("enemy1", "assets/santos.png"); // Time inimigo 1 (Santos FC)
+    this.load.image("enemy2", "assets/palmeiras.png"); // Time inimigo 2 (Palmeiras)
+    this.load.image("enemy3", "assets/corinthians.png"); // Time inimigo 3 (Corinthians)
+    this.load.image("blackBg", "assets/blackBackground.jpg"); // Tela de Game Over
   }
 
   // Função chamada quando a cena é criada
   create() {
-    let enemies = [];
+    // Criando e configurando elementos do jogo
+    let enemies = []; // Array para armazenar os inimigos
     score = this.add.text(5, 50, "Títulos:" + scoreValue, {
       fontSize: "35px",
       fill: "#fff",
-    });
-    // Configuração da imagem de fundo
-    bg = this.add.image(250, 50, "background").setScale(0.8).setOrigin(0, 0);
-    const bench1 = this.physics.add
-      .staticImage(575, 170, "bench")
-      .setImmovable(true);
-    const bench2 = this.physics.add
-      .staticImage(575, 300, "bench")
-      .setImmovable(true);
-    const bench3 = this.physics.add
-      .staticImage(575, 430, "bench")
-      .setImmovable(true);
-    const bench4 = this.physics.add
-      .staticImage(575, 70, "bench")
-      .setImmovable(true);
-    const bench5 = this.physics.add
-      .staticImage(235, 170, "bench")
-      .setFlip(true, false)
-      .setImmovable(true);
-    const bench6 = this.physics.add
-      .staticImage(235, 300, "bench")
-      .setFlip(true, false)
-      .setImmovable(true);
-    const bench7 = this.physics.add
-      .staticImage(235, 70, "bench")
-      .setFlip(true, false)
-      .setImmovable(true);
-    const bench8 = this.physics.add
-      .staticImage(235, 430, "bench")
-      .setFlip(true, false)
-      .setImmovable(true);
-    let benches = [];
-    benches.push(
-      bench1,
-      bench2,
-      bench3,
-      bench4,
-      bench5,
-      bench6,
-      bench7,
-      bench8
-    );
+    }); // Texto para mostrar a pontuação
+    bg = this.add // Imagem de fundo
+      .image(250, 50, "background")
+      .setScale(0.8)
+      .setOrigin(0, 0);
+
+    // Criando e configurando bancos (obstáculos)
+    const benches = []; // Array para armazenar os bancos
+    for (let i = 0; i < 8; i++) {
+      // Criando oito bancos
+      const bench = this.physics.add
+        .staticImage(
+          // Imóvel e com colisão
+          i < 4 ? 575 : 235, // Posição X alternada entre esquerda e direita
+          i % 2 === 0 ? 170 : i % 2 === 1 ? 300 : 430, // Posição Y alternada entre três alturas
+          "bench"
+        )
+        .setImmovable(true);
+      benches.push(bench); // Adicionando o banco ao array
+    }
+
+    // Criando e configurando o jogador
     player = this.physics.add
-      .sprite(300, 600, "spfc")
-      .setScale(0.1)
-      .setBounce(0.2, 0.2)
-      .setDrag(300, 300)
-      .setGravity(0, 0);
-    player.setCollideWorldBounds(true);
+      .sprite(300, 600, "spfc") // Sprite do jogador
+      .setScale(0.1) // Tamanho
+      .setBounce(0.2, 0.2) // Recuo ao colidir
+      .setDrag(300, 300) // Resistência ao movimento
+      .setGravity(0, 0) // Sem gravidade
+      .setCollideWorldBounds(true); // Colisão com as bordas do jogo
 
-    const trophy1 = this.physics.add
+    // Criando e configurando o troféu 1
+    const trophy1 = this.physics.add // Sprite do troféu
       .sprite(300, 100, "trophy1")
-      .setScale(0.15)
-      .setInteractive()
-      .setVisible(true)
-      .setImmovable(true);
-    const trophy2 = this.physics.add
+      .setScale(0.15) // Tamanho
+      .setInteractive() // Deixando interativo
+      .setVisible(true) // Deixando visível
+      .setImmovable(true); // Deixando imóvel
+    // Criando e configurando o troféu 2
+    const trophy2 = this.physics.add // Sprite do troféu
       .sprite(375, 100, "trophy2")
-      .setScale(0.15)
-      .setInteractive()
-      .setVisible(true)
-      .setImmovable(true);
-    const trophy3 = this.physics.add
+      .setScale(0.15) // Tamanho
+      .setInteractive() // Deixando interativo
+      .setVisible(true) // Deixando visível
+      .setImmovable(true); // Deixando imóvel;
+    // Criando e configurando o troféu 3
+    const trophy3 = this.physics.add // Sprite do troféu
       .sprite(450, 96, "trophy3")
-      .setScale(0.08)
-      .setInteractive()
-      .setVisible(true)
-      .setImmovable(true);
-    const trophy4 = this.physics.add
+      .setScale(0.08) // Tamanho
+      .setInteractive() // Deixando interativo
+      .setVisible(true) // Deixando visível
+      .setImmovable(true); // Deixando imóvel;
+    // Criando e configurando o troféu 4
+    const trophy4 = this.physics.add // Sprite do troféu
       .sprite(525, 96, "trophy4")
-      .setScale(0.08)
-      .setInteractive()
-      .setVisible(true)
-      .setImmovable(true);
+      .setScale(0.08) // Tamanho
+      .setInteractive() // Deixando interativo
+      .setVisible(true) // Deixando visível
+      .setImmovable(true); // Deixando imóvel;
 
-    trophies.push(trophy1, trophy2, trophy3, trophy4);
+    trophies.push(trophy1, trophy2, trophy3, trophy4); // Colocando os troféus dentro da lista;
 
-    enemy1 = this.physics.add
+    // Adicionando o inimigo
+    enemy1 = this.physics.add // Sprite do inimigo
       .sprite(290, 180, "enemy1")
-      .setScale(0.1)
-      .setOrigin(0, 0)
-      .setImmovable(true);
-    enemy1.setCollideWorldBounds(true);
+      .setScale(0.1) // Escala
+      .setOrigin(0, 0) // Origem da imagem
+      .setImmovable(true); // Tornando imóvel
+    enemy1.setCollideWorldBounds(true); // Colidir com as bordas do mundo;
 
-    enemy2 = this.physics.add
+    // Adicionando o inimigo
+    enemy2 = this.physics.add // Sprite do inimigo
       .sprite(390, 300, "enemy2")
-      .setScale(0.03)
-      .setOrigin(0, 0)
-      .setImmovable(true);
-    enemy2.setCollideWorldBounds(true);
+      .setScale(0.03) // Escala
+      .setOrigin(0, 0) // Origem da imagem
+      .setImmovable(true); // Deixando imóvel;
+    enemy2.setCollideWorldBounds(true); // Colidir com as bordas do mundo;;
 
-    enemy3 = this.physics.add
+    // Adicionando o inimigo
+    enemy3 = this.physics.add // Sprite do inimigo
       .sprite(500, 375, "enemy3")
-      .setScale(0.2)
-      .setOrigin(0, 0)
-      .setImmovable(true);
-    enemy3.setCollideWorldBounds(true);
-    enemies.push(enemy1, enemy2, enemy3);
-    path = { enemy1: 1, enemy2: 1, enemy3: 1 };
+      .setScale(0.2) // Escala
+      .setOrigin(0, 0) // Origem da imagem
+      .setImmovable(true); // Deixando imóvel;
+    enemy3.setCollideWorldBounds(true); // Colidir com as bordas do mundo;;
+    enemies.push(enemy1, enemy2, enemy3); // Adicionando à lista de inimigos ;
+    path = { enemy1: 1, enemy2: 1, enemy3: 1 }; // Deixando os caminhos como 1 (ida);
 
-    blackBg = this.physics.add
+    // Adicionando a imagem de fundo do game over
+    blackBg = this.physics.add // Sprite do fundo
       .sprite(0, 0, "blackBg")
-      .setScale(3)
-      .setInteractive()
-      .setVisible(false);
+      .setScale(3) // Escala
+      .setInteractive() // Interatividade
+      .setVisible(false); // Deixando invisível;
 
-    let title = "Game Over!";
-    gameOverTitle = this.add
+    let title = "Game Over!"; // Conteúdo do título;
+    gameOverTitle = this.add // Adicionando o título de game over
       .text(
-        this.game.config.width / 2.9 + 35,
-        this.game.config.height / 4,
-        title,
+        this.game.config.width / 2.9 + 35, // posição x do texto
+        this.game.config.height / 4, // posição y do texto
+        title, // texto,
         {
-          color: "#de0209",
-          fontSize: 30,
-          fontStyle: "bold",
+          color: "#de0209", // cor do texto
+          fontSize: 30, // tamanho do texto
+          fontStyle: "bold", // fonte do texto em negrito
         }
       )
-      .setInteractive()
-      .setVisible(false);
-    message = "Pressione ok para reiniciar";
-    gameOverMessage = this.add
+      .setInteractive() // Interatividade
+      .setVisible(false); // Deixando Invisível
+    message = "Pressione ok para reiniciar"; // Conteúdo da mensagem
+    gameOverMessage = this.add // Adicionando a mensagem
       .text(
-        this.game.config.width / 3.2,
-        this.game.config.height / 2.4,
-        message,
+        this.game.config.width / 3.2, // posição x da mensagem
+        this.game.config.height / 2.4, // posição y da imagem
+        message, // texto
         {
-          color: "#fff",
-          fontSize: 20,
+          color: "#fff", // cor da mensagem
+          fontSize: 20, // tamamho de fonte da mensagem
         }
       )
-      .setInteractive()
-      .setVisible(false);
+      .setInteractive() // Interatividade
+      .setVisible(false); // Deixando invisível
     okBtn = this.add
       .image(
         this.game.config.width / 2.3 + 10,
