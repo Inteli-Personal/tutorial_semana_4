@@ -4,15 +4,13 @@ class Welcome extends Phaser.Scene {
   constructor() {
     super({
       key: "Welcome",
-      // Configuração da cor de fundo da cena
-      backgroundColor: "#000",
+      backgroundColor: "#000", // Configuração da cor de fundo da cena
     });
   }
 
   // Pré-carregamento de recursos
   preload() {
-    // Carregando a imagem do botão
-    this.load.image("okBtn", "assets/okBtn.png");
+    this.load.image("okBtn", "assets/okBtn.png"); // Carregando a imagem do botão
   }
 
   // Função chamada quando a cena é criada
@@ -20,7 +18,6 @@ class Welcome extends Phaser.Scene {
     // Configuração do texto de boas-vindas
     let title = "O Papa Títulos";
     this.add.text(
-      // Posiciona o título no centro da tela (horizontalmente) e 10% da altura da tela abaixo do topo
       this.game.config.width / 2.9,
       this.game.config.height / 10,
       title,
@@ -30,8 +27,6 @@ class Welcome extends Phaser.Scene {
         fontStyle: "bold",
       }
     );
-
-    // Define o texto das instruções
     let instructions = [
       "Olá! Aqui está o passo a passo",
       "para que você aproveite o máximo",
@@ -44,45 +39,31 @@ class Welcome extends Phaser.Scene {
       "setas para cima, baixo, direita ",
       "e esquerda para mover seu escudo.",
     ];
-
-    // Cria e configura cada linha de instrução
     for (let i = 0; i < instructions.length; i++) {
-      this.add.text(
-        220, // Posição horizontal fixa a 220 pixels da borda esquerda
-        150 + i * 20, // Posiciona a primeira linha a 150 pixels da borda superior e as demais com espaçamento de 20 pixels
-        instructions[i],
-        {
-          color: "#fff",
-          fontSize: 20,
-        }
-      );
+      this.add.text(220, 150 + i * 20, instructions[i], {
+        color: "#fff",
+        fontSize: 20,
+      });
     }
 
-    // Configuração do botão "OK"
+    // Configuração do botão de "OK"
     let okBtn = this.add
-      // Posiciona o botão no centro da tela (horizontalmente) e 2.7 vezes a 1/4 da altura da tela abaixo do topo
       .image(
         this.game.config.width / 2.2,
         (this.game.config.height / 4) * 2.7,
         "okBtn"
       )
-      // Escala a imagem do botão para 70%
       .setScale(0.7)
-      // Define a origem da imagem no canto superior esquerdo
       .setOrigin(0, 0)
-      // Torna o botão interativo e visível
       .setInteractive()
       .setVisible(true);
 
     // Configuração de evento para iniciar o jogo ao clicar no botão "ok"
     okBtn.on(
       "pointerdown",
-      // Função para iniciar o jogo ao clicar no botão
       function () {
-        // Inicia a cena "PapaTitulos" e passa o objeto "game" como parâmetro
         this.scene.start("PapaTitulos", this.game);
       },
-      // Define o contexto da função como a cena atual
       this
     );
   }
